@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>早岐商店街アーカイブ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .container {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slideshow-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            object-fit: cover;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .slideshow-image.active {
+            opacity: 0.6;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            z-index: 3;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .navigation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .nav-button {
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        .nav-button i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-button span {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .slideshow-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .slideshow-dot.active {
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 150px;
+                height: 150px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="slideshow">
+            <img src="IMG_4094-2.jpeg" alt="昭和の商店街" class="slideshow-image active">
+            <img src="IMG_2290.jpeg" alt="平成の商店街" class="slideshow-image">
+            
+        </div>
+
+        <header class="header">
+            <h1 class="title">早岐商店街タイムトラベル</h1>
+            <p class="subtitle">懐かしい記憶と新しい発見の旅へ</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="#" class="nav-button">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>ストリートマップ</span>
+            </a>
+            <a href="#" class="nav-button">
+                <i class="fas fa-star"></i>
+                <span>おすすめスポット</span>
+            </a>
+            <a href="#" class="nav-button">
+                <i class="fas fa-clock-rotate-left"></i>
+                <span>思い出アルバム</span>
+            </a>
+            <a href="#" class="nav-button">
+                <i class="fas fa-store"></i>
+                <span>店舗情報</span>
+            </a>
+        </nav>
+
+        <div class="slideshow-controls">
+            <div class="slideshow-dot active"></div>
+            <div class="slideshow-dot"></div>
+            <div class="slideshow-dot"></div>
+        </div>
+    </div>
+
+    <script>
+        const images = document.querySelectorAll('.slideshow-image');
+        const dots = document.querySelectorAll('.slideshow-dot');
+        let currentSlide = 0;
+        const slideInterval = 5000;
+
+        function nextSlide() {
+            images[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % images.length;
+            images[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                images[currentSlide].classList.remove('active');
+                dots[currentSlide].classList.remove('active');
+                currentSlide = index;
+                images[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            });
+        });
+
+        
+        setInterval(nextSlide, slideInterval);
+    </script>
+</body>
+</html>
